@@ -14,7 +14,7 @@ public class Main : MonoBehaviour {
     // Use this for initialization
     void Start () {
         skeleton = human.GetComponentInChildren<Skeleton>();
-        public WebCamTexture mCamera = null;
+        //public WebCamTexture mCamera = null;
         
 
     }
@@ -35,16 +35,5 @@ public class Main : MonoBehaviour {
 
     }
 
-    private void OnDrawGizmos()
-    {
-        foreach(var c in real_cameras)
-        {
-            foreach (var v in c.GetComponent<RealCamera>().skeleton2D)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawSphere(v, 0.05f);
-            }
-        }
-        
-    }
+   
 }
