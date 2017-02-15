@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Strimming : MonoBehaviour {
+public class CameraPlane : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,4 +13,6 @@ public class Strimming : MonoBehaviour {
 	void Update () {
 		
 	}
+
+  
 }
