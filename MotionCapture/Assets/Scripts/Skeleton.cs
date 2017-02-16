@@ -5,21 +5,21 @@ using UnityEngine;
 public class Skeleton : MonoBehaviour {
 
     public List<Bone> bones = new List<Bone>();
-    
+    public List<Transform> joints = new List<Transform>();
+    public List<DetectingPoint> detecting_points = new List<DetectingPoint>();
 
-	// Use this for initialization
-	void Start () {
-
+    // Use this for initialization
+    void Start () {
         //取得所有的Bone存到Bones
-        Transform[] bs;
-        bs = GetComponentsInChildren<Transform>();
-        foreach (var b in bs)
+        joints.AddRange(GetComponentsInChildren<Transform>());
+        foreach (var b in joints)
         {
-            Bone bone = new Bone(b.parent,b);
+            Bone bone = new Bone(b.parent,b,this);
+            bone.initDetectingPoints();
             bones.Add(bone);
         }
 
-        //畫出骨架
+        //畫出關節點
         showSkeleton();
     }
 	
@@ -30,15 +30,19 @@ public class Skeleton : MonoBehaviour {
 
     void showSkeleton()
     {
-        foreach (var bone in bones)
+
+
+        //將關節點以藍點標出
+        foreach (var j in joints)
         {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             go.GetComponent<Renderer>().material.color = Color.blue;
-            go.transform.position = bone.tail.position;
+            go.transform.position = j.position;
             go.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            go.transform.parent = bone.tail;
-
-            Debug.DrawLine(bone.head.position, bone.tail.position, Color.red);
+            go.transform.parent = j;
+            
         }
     }
+
+
 }
