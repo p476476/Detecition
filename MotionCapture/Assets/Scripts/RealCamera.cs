@@ -20,7 +20,7 @@ public class RealCamera : MonoBehaviour {
             mCamera = new WebCamTexture();
             if(texturePlane != null)
             {
-                texturePlane.getComponent<Renender>().material = mCamera;
+                texturePlane.GetComponent<Renderer>().material.SetTexture("_MainTex", mCamera);
             }
             mCamera.Play();
     }
@@ -36,7 +36,7 @@ public class RealCamera : MonoBehaviour {
     {
 
         //在場景中畫出2D投影點
-        if (vec != null)
+        if (skeleton2D != null)
         {
             foreach (var vec in skeleton2D)
             {
