@@ -22,8 +22,8 @@ public class Main : MonoBehaviour {
         //取得3D骨架
         skeleton = human.GetComponentInChildren<Skeleton>();
 
-        //取得所有camera
-        real_cameras = GetComponent<RealCameraManager>().real_cameras;
+		//取得所有camera
+		real_cameras = GetComponent<RealCameraManager> ().real_cameras;
 
         //取得與camera對應的2D骨架
         skeletons2D = new Skeleton2D[real_cameras.Length];
@@ -37,7 +37,6 @@ public class Main : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
 
         /*
         //更新影像
@@ -74,8 +73,7 @@ public class Main : MonoBehaviour {
         }
         foreach (RealCamera camera in real_cameras)
         {
-
-            Debug.Log(camera.transform.name);  
+			
             Skeleton2D sk2D = camera.GetComponent<Skeleton2D>();
 
             //投影到投影面

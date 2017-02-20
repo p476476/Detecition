@@ -25,7 +25,10 @@ public class Skeleton : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		foreach (var b in bones)
+		{
+			b.updateDetectingPoints ();
+		}
 	}
 
     void showSkeleton()

@@ -1,11 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\ImageProcess.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\RealCameraManager.cs">
     <Files>
       <File FileName="Assets\Scripts\Main.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\RealCamera.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Bone.cs" Line="4" Column="1" />
-      <File FileName="Assets\Scripts\ImageProcess.cs" Line="10" Column="8" />
+      <File FileName="Assets\Scripts\Bone.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ImageProcess.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\RealCameraManager.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -70,7 +70,6 @@ public class RealCamera : MonoBehaviour {
         //Plane上畫出投影點
         if (show_project2D_vertice_on_plane && plane != null)
         {
-            //orgin 為
 
             //origin 為 plane 左下角的點
             Vector3 origin =  new Vector3(plane.position.x - (plane.localScale.x * 5), plane.position.y - (plane.localScale.y * 5), plane.position.z);

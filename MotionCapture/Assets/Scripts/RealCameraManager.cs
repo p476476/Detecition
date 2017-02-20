@@ -10,7 +10,7 @@ public class RealCameraManager : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        real_cameras = real_camera_catalog.GetComponentsInChildren<RealCamera>();
+        //real_cameras = real_camera_catalog.GetComponentsInChildren<RealCamera>();
         //攝影機設定
         WebCamDevice[] wcd = WebCamTexture.devices;
         if (wcd != null)

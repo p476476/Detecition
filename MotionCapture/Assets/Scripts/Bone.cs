@@ -9,6 +9,8 @@ public class Bone  {
     public float radius=0.1f;
     public DetectingPoint[] detect_points ;
 
+	Vector3 interval;
+
     public Bone()
     {
     }
@@ -21,10 +23,9 @@ public class Bone  {
 
     public void initDetectingPoints()
     {
-        Debug.Log(head.name + " " + tail.name + " " + Vector3.Distance(tail.position, head.position));
         //計算間隔
         int count = (int)(Vector3.Distance(head.position, tail.position) / radius);
-        Vector3 interval =  (tail.position- head.position)/count;
+        interval =  (tail.position- head.position)/count;
 
         detect_points = new DetectingPoint[count+2];
         
@@ -42,4 +43,15 @@ public class Bone  {
         }
 
     }
+
+	public void updateDetectingPoints()
+	{interval =  (tail.position- head.position)/detect_points.Length;
+		for (int i = 0; i <detect_points.Length; i++)
+		{
+			
+			//設定偵測點位置
+			detect_points[i].position = head.position+interval*i;
+			//設定偵測點顏色
+		}
+	}
 }
