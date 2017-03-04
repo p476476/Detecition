@@ -1,4 +1,1 @@
-sceneSetups:
-- path: Assets/MotionCapture.unity
-  isLoaded: 1
-  isActive: 1
+sceneSetups: []

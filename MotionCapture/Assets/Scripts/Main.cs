@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Main : MonoBehaviour {
 
+	public static Main instance;
+
     //script
     Vertice3DTo2D v3t2 = new Vertice3DTo2D();
     ImageProcess image_process = new ImageProcess();
@@ -11,8 +13,12 @@ public class Main : MonoBehaviour {
     //object
     public Transform human;
     Skeleton skeleton;
+	RealCameraManager real_camera_manager;
     public RealCamera[] real_cameras;
-    Skeleton2D[] skeletons2D;
+
+	//calculate data
+	public Data data;
+
     //test
     public Transform tempPlane;
 
@@ -23,14 +29,12 @@ public class Main : MonoBehaviour {
         skeleton = human.GetComponentInChildren<Skeleton>();
 
 		//取得所有camera
-		real_cameras = GetComponent<RealCameraManager> ().real_cameras;
+		real_camera_manager = GetComponent<RealCameraManager> ();
+		real_cameras = real_camera_manager.getCameras ();
 
-        //取得與camera對應的2D骨架
-        skeletons2D = new Skeleton2D[real_cameras.Length];
-        for (int i=0;i<real_cameras.Length;i++)
-        {
-            skeletons2D[i] = real_cameras[i].GetComponent<Skeleton2D>();
-        }
+        //初始化計算資料
+		data = new Data();
+		data.init (real_camera_manager.camera_count, skeleton.detecting_points.Count,640,480);
 
         StartCoroutine(fun());
     }
@@ -38,62 +42,44 @@ public class Main : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        /*
-        //更新影像
-        foreach (var camera in real_cameras)
-        {
-            if (camera.mCamera == null)
-            {
-                //Debug.Log("mCamera is null.");
-            }
-            else
-            {
-                if (camera.last_frame == null)
-                {
-                    //第一張影像
-                    camera.last_frame = new Texture2D(camera.mCamera.width, camera.mCamera.height);
-                    camera.last_frame.SetPixels(camera.mCamera.GetPixels());
-                }
-                else
-                {
-                    //取地目前的影像
-                    camera.last_frame.SetPixels(camera.mCamera.GetPixels());
-                }
-            }
-
-        }*/
         //骨架2D化(投影到投影面,normalize,轉換成textrue座標,紀錄2D骨架)
 
         Vector3[] dp3D = new Vector3[skeleton.detecting_points.Count];
-
         //取得偵測點array
         for (int i = 0; i < skeleton.detecting_points.Count; i++)
         {
             dp3D[i] = skeleton.detecting_points[i].position;
         }
-        foreach (RealCamera camera in real_cameras)
+		for(int i=0;i<real_cameras.Length;i++)
         {
 			
-            Skeleton2D sk2D = camera.GetComponent<Skeleton2D>();
+            
 
             //投影到投影面
-            sk2D.dp_on_project_plane = v3t2.projectVertice3DToProjectPlane(dp3D, camera);
+			Vector3[] dp1 = new Vector3[skeleton.detecting_points.Count];
+			dp1 = v3t2.projectVertice3DToProjectPlane(dp3D, real_cameras[i]);
+			for(int j=0;j<dp1.Length;j++)
+			{
+				data.dp_on_project_plane [i, j] = dp1 [j];
+			}
 
             //normalize
-            sk2D.dp_normalized = v3t2.normalizeVertice2D(sk2D.dp_on_project_plane, camera);
+			Vector3[] dp2 = new Vector3[skeleton.detecting_points.Count];
+			dp2  = v3t2.normalizeVertice2D(dp1, real_cameras[i]);
+			for(int j=0;j<dp2.Length;j++)
+			{
+				data.dp_normalized [i, j] = dp2 [j];
+			}
+				
 
             //轉換成textrue座標
-            Vector3[] dp2D_on_texture = new Vector3[skeleton.detecting_points.Count];
-            dp2D_on_texture = v3t2.transformNormalizeVerticeToTexture(sk2D.dp_normalized, camera);
-
-            //紀錄2D骨架
-            sk2D.detecting_points_2D = new DetectingPoint2D[skeleton.detecting_points.Count];
-            for (int i = 0; i < skeleton.detecting_points.Count; i++)
-            {
-                DetectingPoint2D dp = new DetectingPoint2D();
-                dp.position = dp2D_on_texture[i];
-                sk2D.detecting_points_2D[i] = dp;
-            }
+            Vector3[] dp3 = new Vector3[skeleton.detecting_points.Count];
+			dp3 = v3t2.transformNormalizeVerticeToTexture(dp2, real_cameras[i]);
+			for(int j=0;j<dp2.Length;j++)
+			{
+				data.dp_on_texture [i, j] = dp3 [j];
+			}
+				
         }
 
 
@@ -123,17 +109,20 @@ public class Main : MonoBehaviour {
                     }
                     else
                     {
-                        //取地目前的影像
+                        //取得目前的影像
                         Texture2D current_frame = new Texture2D(camera.mCamera.width, camera.mCamera.height);
                         current_frame.SetPixels(camera.mCamera.GetPixels());
 
+						current_frame.SetPixels (camera.mCamera.GetPixels ());
                         //與前一張影像作相減
-                        Texture2D result = image_process.differenceOfTwoImage(camera.last_frame, current_frame);
-                        result.Apply();
+						Texture2D diff_fram = image_process.differenceOfTwoImage(camera.last_frame,current_frame);
+						diff_fram.Apply();
 
                         //顯示結果在temp frame
-                        tempPlane.GetComponent<Renderer>().material.SetTexture("_MainTex", result);
+						tempPlane.GetComponent<Renderer>().material.SetTexture("_MainTex", diff_fram);
 
+						//紀錄
+						data.last_diff_frames[camera.camera_num] = diff_fram;
                         camera.last_frame = current_frame;
 
                     }
@@ -147,5 +136,8 @@ public class Main : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
         }
     }
+
+
+
     
 }
