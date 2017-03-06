@@ -10,7 +10,6 @@ public class RealCamera : MonoBehaviour {
     public Transform plane;
 
     //draw 選項
-    public bool draw_project2D_vertice_in_space = true;
     public bool show_project2D_vertice_on_plane = true;
 
     //Image
@@ -52,7 +51,7 @@ public class RealCamera : MonoBehaviour {
         mCamera.Stop();
     }
 
-    
 
-  
+
+
 }

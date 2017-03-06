@@ -76,17 +76,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Bone.cs" />
-    <Compile Include="Assets\Scripts\Bone2D.cs" />
     <Compile Include="Assets\Scripts\CameraPlane.cs" />
+    <Compile Include="Assets\Scripts\Data.cs" />
+    <Compile Include="Assets\Scripts\DetectProcess.cs" />
     <Compile Include="Assets\Scripts\DetectingPoint.cs" />
     <Compile Include="Assets\Scripts\DetectingPoint2D.cs" />
+    <Compile Include="Assets\Scripts\Drawer.cs" />
     <Compile Include="Assets\Scripts\ImageProcess.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
     <Compile Include="Assets\Scripts\Projection.cs" />
     <Compile Include="Assets\Scripts\RealCamera.cs" />
     <Compile Include="Assets\Scripts\RealCameraManager.cs" />
     <Compile Include="Assets\Scripts\Skeleton.cs" />
-    <Compile Include="Assets\Scripts\Skeleton2D.cs" />
     <Compile Include="Assets\Scripts\Vertice3DTo2D.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

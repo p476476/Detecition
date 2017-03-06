@@ -21,7 +21,17 @@ public class Main : MonoBehaviour {
 
     //test
     public Transform tempPlane;
+    public bool start_detect = false;
 
+    Vector3[] dp3D;
+    Vector3[] dp1;
+    Vector3[] dp2;
+    Vector3[] dp3;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Use this for initialization
     void Start () {
@@ -33,9 +43,18 @@ public class Main : MonoBehaviour {
 		real_cameras = real_camera_manager.getCameras ();
 
         //初始化計算資料
-		data = new Data();
+        data = GetComponent<Data>();
 		data.init (real_camera_manager.camera_count, skeleton.detecting_points.Count,640,480);
 
+        dp3D = new Vector3[skeleton.detecting_points.Count];
+        for(int i=0;i<dp3D.Length;i++)
+        {
+            dp3D[i] = new Vector3();
+        }
+
+        dp1 = new Vector3[skeleton.detecting_points.Count];
+        dp2 = new Vector3[skeleton.detecting_points.Count];
+        dp3 = new Vector3[skeleton.detecting_points.Count];
         StartCoroutine(fun());
     }
 
@@ -43,8 +62,6 @@ public class Main : MonoBehaviour {
     void Update () {
 
         //骨架2D化(投影到投影面,normalize,轉換成textrue座標,紀錄2D骨架)
-
-        Vector3[] dp3D = new Vector3[skeleton.detecting_points.Count];
         //取得偵測點array
         for (int i = 0; i < skeleton.detecting_points.Count; i++)
         {
@@ -52,19 +69,18 @@ public class Main : MonoBehaviour {
         }
 		for(int i=0;i<real_cameras.Length;i++)
         {
-			
             
 
             //投影到投影面
-			Vector3[] dp1 = new Vector3[skeleton.detecting_points.Count];
 			dp1 = v3t2.projectVertice3DToProjectPlane(dp3D, real_cameras[i]);
-			for(int j=0;j<dp1.Length;j++)
-			{
-				data.dp_on_project_plane [i, j] = dp1 [j];
-			}
+            for (int j = 0; j < dp1.Length; j++)
+            {
+                data.dp_on_project_plane[i, j] = dp1[j];
+            }
+           
+
 
             //normalize
-			Vector3[] dp2 = new Vector3[skeleton.detecting_points.Count];
 			dp2  = v3t2.normalizeVertice2D(dp1, real_cameras[i]);
 			for(int j=0;j<dp2.Length;j++)
 			{
@@ -73,7 +89,6 @@ public class Main : MonoBehaviour {
 				
 
             //轉換成textrue座標
-            Vector3[] dp3 = new Vector3[skeleton.detecting_points.Count];
 			dp3 = v3t2.transformNormalizeVerticeToTexture(dp2, real_cameras[i]);
 			for(int j=0;j<dp2.Length;j++)
 			{
@@ -115,21 +130,41 @@ public class Main : MonoBehaviour {
 
 						current_frame.SetPixels (camera.mCamera.GetPixels ());
                         //與前一張影像作相減
-						Texture2D diff_fram = image_process.differenceOfTwoImage(camera.last_frame,current_frame);
-						diff_fram.Apply();
+						Texture2D diff_frame = image_process.differenceOfTwoImage(camera.last_frame,current_frame);
+						diff_frame.Apply();
 
                         //顯示結果在temp frame
-						tempPlane.GetComponent<Renderer>().material.SetTexture("_MainTex", diff_fram);
+						tempPlane.GetComponent<Renderer>().material.SetTexture("_MainTex", diff_frame);
 
 						//紀錄
-						data.last_diff_frames[camera.camera_num] = diff_fram;
+						data.last_diff_frames[camera.camera_num] = data.current_diff_frames[camera.camera_num];
+                        data.current_diff_frames[camera.camera_num] = diff_frame;
+
                         camera.last_frame = current_frame;
+                        
+                       
 
+                        
                     }
-                }
 
-                
+
+                    
+
+                }
                
+
+
+            }
+
+            if (start_detect)
+            {
+
+                //計算 movement
+                image_process.calculateMovement(data.movement, data.last_diff_frames, data.current_diff_frames, 10);
+
+                //計算 dp movement
+                DetectProcess detect_process = new DetectProcess();
+                detect_process.calculateDetectPointDirection(data.movement, data.dp_on_texture, data.dp_2D, data.dp_movement);
 
             }
 

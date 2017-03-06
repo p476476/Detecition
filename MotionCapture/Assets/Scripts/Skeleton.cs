@@ -8,16 +8,21 @@ public class Skeleton : MonoBehaviour {
     public List<Transform> joints = new List<Transform>();
     public List<DetectingPoint> detecting_points = new List<DetectingPoint>();
 
-    // Use this for initialization
-    void Start () {
+    private void Awake()
+    {
         //取得所有的Bone存到Bones
         joints.AddRange(GetComponentsInChildren<Transform>());
         foreach (var b in joints)
         {
-            Bone bone = new Bone(b.parent,b,this);
+            Bone bone = new Bone(b.parent, b, this);
             bone.initDetectingPoints();
             bones.Add(bone);
         }
+    }
+
+    // Use this for initialization
+    void Start () {
+        
 
         //畫出關節點
         showSkeleton();
@@ -29,7 +34,8 @@ public class Skeleton : MonoBehaviour {
 		{
 			b.updateDetectingPoints ();
 		}
-	}
+
+    }
 
     void showSkeleton()
     {

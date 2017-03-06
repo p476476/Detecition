@@ -25,54 +25,104 @@ public class ImageProcess {
         return result;
     }
 
-	public void calculateMovement(Vector3[] eight_direction_movement,Texture2D[] last_diff_frames,Texture2D[] current_diff_frames,int detect_range)
+    
+
+	public void calculateMovement(Vector3[,,] movement,Texture2D[] last_diff_frames,Texture2D[] current_diff_frames,int detect_range)
 	{
-		for (int frame_i = 0; frame_count < current_diff_frames.Length; frame_count++) {
-			Color[] c_frame = current_diff_frames[frame_i].GetPixels ();
+        float thres = 0.3f;
+
+		for (int frame_i = 0; frame_i < 1; frame_i++) {    //each frame
+            Color[] c_frame = new Color[current_diff_frames[frame_i].height* current_diff_frames[frame_i].width];
+            c_frame = current_diff_frames[frame_i].GetPixels ();
 			Color[] l_frame = last_diff_frames[frame_i].GetPixels ();
 
 			float temp_color_sum;
 
-			for (int i = 0; i < c_frame.Length; i++) { //i = 一個pixel 在 frame 中的 index
+			for (int i = 0; i < c_frame.Length; i++) { //each pixel in a frame
 
 				temp_color_sum = c_frame [i].r + c_frame [i].g + c_frame [i].b;
 
-				if (temp_color_sum > 0.1) {
-					// 8 direction 
+				if (temp_color_sum > thres) {
+                    Vector3 move = new Vector3();
+                    int count=0;
+                    int temp_index;
+                    // 8 direction 
 
-					//向右找
-					for (int j = 1; j < detect_range; j++) {
+                    //向右找
+                    for (int j = 1; j < detect_range; j++)
+                    {
+                        temp_index = i + j;  //t = 偵測的pixel的index
 
+                        if (temp_index % 640 == 0)  break; //超過邊界
 
-						int temp_index = i + j;  //t = 偵測的pixel的index
+                        temp_color_sum = l_frame[temp_index].r + l_frame[temp_index].g + l_frame[temp_index].b;
+                        if (temp_color_sum > thres)
+                        {
+                            move.x += j;
+                            count++;
+                        }
 
-						if (temp_index % 640 == 0) //超過邊界
-							break;
+                    }
+                    
+                    //向下
+                    for (int j = 1; j < detect_range; j++)
+                    {
+                        temp_index = i + j * 640;
 
-						temp_color_sum = l_frame [temp_index].r + l_frame [temp_index].g + l_frame [temp_index].b;
-						if (temp_color_sum > 0.1) {
-							eight_direction_movement[frame_i,
-						}
-					}
+                        if (temp_index >= 640 * 480)
+                        {
+                            break;
+                            Debug.Log("index=" + temp_index);
+                        }
+                        temp_color_sum = l_frame[temp_index].r + l_frame[temp_index].g + l_frame[temp_index].b;
+                        if (temp_color_sum > thres)
+                        {
+                            move.y += j;
+                            count++;
+                        }
+                        
+                    }
 
+                    //向左
+                    for (int j = 1; j < detect_range; j++)
+                    {
+                        temp_index = i - j;
 
+                        if (temp_index % 640 == 639 || temp_index<0) break;
+                       
+                        temp_color_sum = l_frame[temp_index].r + l_frame[temp_index].g + l_frame[temp_index].b;
+                        if (temp_color_sum > thres)
+                        {
+                            move.x -= j;
+                            count++;
+                        }
+                       
+                    }
+
+                    //向上
+                    for (int j = 1; j < detect_range; j++)
+                    {
+                        temp_index = i - j*640;
+
+                        if (temp_index < 0) break;
+
+                        temp_color_sum = l_frame[temp_index].r + l_frame[temp_index].g + l_frame[temp_index].b;
+                        if (temp_color_sum > thres)
+                        {
+                            move.y -= j;
+                            count++;
+                        }
+                    }
+
+                    movement[frame_i,i%640,i/640] = move / count;
 				}
+                else
+                {
+                    movement[frame_i, i % 640, i / 640] = Vector3.zero;
+                }
 			}
 		}
-					
 
-
-
-
-
-			}
-
-		}
-
-	}
-
-	int trans_2D_to_1D(int x,int y,int width,int height){
-		return y*width+x;
 	}
 		
 	
