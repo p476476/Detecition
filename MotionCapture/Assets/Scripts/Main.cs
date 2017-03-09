@@ -102,14 +102,14 @@ public class Main : MonoBehaviour {
 
      IEnumerator fun()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         Debug.Log("start detecting.");
         while (true)
         {
 
             foreach (RealCamera camera in real_cameras)
             {
-                //做影像相減
+                //影像相減
                 if (camera.mCamera == null)
                 {
                     //Debug.Log("mCamera is null.");
@@ -140,7 +140,10 @@ public class Main : MonoBehaviour {
 						data.last_diff_frames[camera.camera_num] = data.current_diff_frames[camera.camera_num];
                         data.current_diff_frames[camera.camera_num] = diff_frame;
 
-                        camera.last_frame = current_frame;
+						//camera.last_frame = current_frame;
+
+						camera.last_frame.SetPixels (current_frame.GetPixels());
+						DestroyImmediate (current_frame);
                         
                        
 
@@ -168,7 +171,7 @@ public class Main : MonoBehaviour {
 
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.03f);
         }
     }
 

@@ -9,6 +9,9 @@ public class RealCamera : MonoBehaviour {
     //用於顯示影像的平面
     public Transform plane;
 
+	//bool
+	public bool isStreaming = false;
+
     //draw 選項
     public bool show_project2D_vertice_on_plane = true;
 
@@ -24,6 +27,7 @@ public class RealCamera : MonoBehaviour {
     public float camera_distance = 1;
     public int pixel_width = 640;
     public int pixel_height = 480;
+	public Vector3 project_plane_center;
 
     //project script
     Vertice3DTo2D v3to2;
@@ -42,6 +46,7 @@ public class RealCamera : MonoBehaviour {
         mCamera = new WebCamTexture(wcd.name);
         plane.GetComponent<Renderer>().material.SetTexture("_MainTex", mCamera);
         mCamera.Play();
+		isStreaming = true;
     }
 
     //停止擷取影像

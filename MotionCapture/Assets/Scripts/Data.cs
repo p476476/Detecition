@@ -17,8 +17,9 @@ public class Data :MonoBehaviour
 	public Vector3[,] dp_on_texture;			//[camera No. , detection point No.];
 
 	//detect point data
-	public DetectingPoint2D [,] dp_2D;					//[camera No. , detection point No.];
-	public Vector3[,] dp_movement;	//[camera No. , detection point No.];
+	public DetectingPoint2D [,] dp_2D;			//[camera No. , detection point No.];
+	public Vector3[,] dp_movement;				//[camera No. , detection point No.];
+	public Vector3[] dp_movement_3D;			//[detection point No.];
 
     public void init(int camera_count,int dp_count,int camera_width_pixel,int camera_height_pixel)
 	{
@@ -83,6 +84,12 @@ public class Data :MonoBehaviour
                 dp_movement[i, j] = new Vector3();
             }
         }
+
+		dp_movement_3D = new Vector3[dp_count];
+		for (int i = 0; i < dp_movement.GetLength(0); i++)
+		{
+			dp_movement_3D[i] = new Vector3();
+		}
     }
 
 }

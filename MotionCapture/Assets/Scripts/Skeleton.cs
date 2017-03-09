@@ -15,8 +15,11 @@ public class Skeleton : MonoBehaviour {
         foreach (var b in joints)
         {
             Bone bone = new Bone(b.parent, b, this);
-            bone.initDetectingPoints();
             bones.Add(bone);
+
+
+			bone.initDetectingPoints(detecting_points.Count);
+			print (detecting_points.Count);
         }
     }
 

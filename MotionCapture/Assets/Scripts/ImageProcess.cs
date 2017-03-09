@@ -32,8 +32,7 @@ public class ImageProcess {
         float thres = 0.3f;
 
 		for (int frame_i = 0; frame_i < 1; frame_i++) {    //each frame
-            Color[] c_frame = new Color[current_diff_frames[frame_i].height* current_diff_frames[frame_i].width];
-            c_frame = current_diff_frames[frame_i].GetPixels ();
+            Color[] c_frame  = current_diff_frames[frame_i].GetPixels ();
 			Color[] l_frame = last_diff_frames[frame_i].GetPixels ();
 
 			float temp_color_sum;
@@ -69,11 +68,9 @@ public class ImageProcess {
                     {
                         temp_index = i + j * 640;
 
-                        if (temp_index >= 640 * 480)
-                        {
-                            break;
-                            Debug.Log("index=" + temp_index);
-                        }
+						if (temp_index >= 640 * 480)
+							break;
+
                         temp_color_sum = l_frame[temp_index].r + l_frame[temp_index].g + l_frame[temp_index].b;
                         if (temp_color_sum > thres)
                         {
@@ -124,8 +121,7 @@ public class ImageProcess {
 		}
 
 	}
-		
-	
+
 
 
 }

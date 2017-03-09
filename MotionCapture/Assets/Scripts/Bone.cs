@@ -7,7 +7,8 @@ public class Bone  {
     public Transform head;
     public Transform tail;
     public float radius=0.1f;
-    public DetectingPoint[] detect_points ;
+	public int dp_index;
+	public int dp_count;
 
 	Vector3 interval;
 
@@ -21,36 +22,36 @@ public class Bone  {
         tail = BoneTail;
     }
 
-    public void initDetectingPoints()
+	public void initDetectingPoints(int start_index)
     {
-        //計算間隔
-        int count = (int)(Vector3.Distance(head.position, tail.position) / radius);
-        interval =  (tail.position- head.position)/count;
+		dp_index = start_index;
 
-        detect_points = new DetectingPoint[count+2];
+        //計算間隔
+		dp_count = (int)(Vector3.Distance(head.position, tail.position) / radius)+1;
+		interval =  (tail.position- head.position)/(dp_count);
+
         
-        for (int i = 0; i <count + 2; i++)
+		for (int i = 0; i <dp_count; i++)
         {
             DetectingPoint dp = new DetectingPoint();
             dp.owner = this;
-            dp.number = i;
+			dp.number = dp_index+i;
             //設定偵測點位置
             //dp.position = new Vector3();
             dp.position = head.position+interval*i;
             //設定偵測點顏色
-            detect_points[i] = dp;
+			//dp.color
             owner.detecting_points.Add(dp);
         }
-
     }
 
 	public void updateDetectingPoints()
-	{interval =  (tail.position- head.position)/detect_points.Length;
-		for (int i = 0; i <detect_points.Length; i++)
+	{
+		for (int i = 0; i <dp_count; i++)
 		{
 			
 			//設定偵測點位置
-			detect_points[i].position = head.position+interval*i;
+			owner.detecting_points[dp_index+i].position = head.position+interval*i;
 			//設定偵測點顏色
 		}
 	}
