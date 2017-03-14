@@ -12,6 +12,7 @@ public class Data :MonoBehaviour
 
 
 	//detect point position data
+	public Vector3[] dp3D;
 	public Vector3[,] dp_on_project_plane;		//[camera No. , detection point No.];
 	public Vector3[,] dp_normalized;			//[camera No. , detection point No.];
 	public Vector3[,] dp_on_texture;			//[camera No. , detection point No.];
@@ -38,6 +39,12 @@ public class Data :MonoBehaviour
             }
         }
 
+
+		dp3D = new Vector3[dp_count];
+		for (int i=0;i<dp3D.GetLength(0);i++)
+		{
+			dp3D[i] = new Vector3();
+		}
 
         dp_on_project_plane = new Vector3[camera_count,dp_count];
         for (int i=0;i<dp_on_project_plane.GetLength(0);i++)

@@ -23,7 +23,7 @@ public class Main : MonoBehaviour {
     public Transform tempPlane;
     public bool start_detect = false;
 
-    Vector3[] dp3D;
+    
     Vector3[] dp1;
     Vector3[] dp2;
     Vector3[] dp3;
@@ -46,11 +46,6 @@ public class Main : MonoBehaviour {
         data = GetComponent<Data>();
 		data.init (real_camera_manager.camera_count, skeleton.detecting_points.Count,640,480);
 
-        dp3D = new Vector3[skeleton.detecting_points.Count];
-        for(int i=0;i<dp3D.Length;i++)
-        {
-            dp3D[i] = new Vector3();
-        }
 
         dp1 = new Vector3[skeleton.detecting_points.Count];
         dp2 = new Vector3[skeleton.detecting_points.Count];
@@ -65,14 +60,14 @@ public class Main : MonoBehaviour {
         //取得偵測點array
         for (int i = 0; i < skeleton.detecting_points.Count; i++)
         {
-            dp3D[i] = skeleton.detecting_points[i].position;
+            data.dp3D[i] = skeleton.detecting_points[i].position;
         }
 		for(int i=0;i<real_cameras.Length;i++)
         {
             
 
             //投影到投影面
-			dp1 = v3t2.projectVertice3DToProjectPlane(dp3D, real_cameras[i]);
+			dp1 = v3t2.projectVertice3DToProjectPlane(data.dp3D, real_cameras[i]);
             for (int j = 0; j < dp1.Length; j++)
             {
                 data.dp_on_project_plane[i, j] = dp1[j];

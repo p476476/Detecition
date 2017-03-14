@@ -23,10 +23,8 @@ public class Vertice3DTo2D
             vertex2D[i] = camera_position + cameraToVertex * t;
 
             //計算投影後大小
+
         }
-
-
-
         return vertex2D;
     }
 
@@ -84,4 +82,32 @@ public class Vertice3DTo2D
         return result;
 
     }
+
+	//將3D骨架投影到投影面
+	public void scaleVertice3DToTexture(DetectingPoint[] dp,Vector3[] dp_3D,RealCamera[] cameras, float[,] redius_on_plane, int[,] redius_on_texture)
+	{
+		int vertex_num = dp_3D.Length;
+		Vector3[] rediuses = new Vector3[vertex_num];
+
+
+
+		for (int camera_i = 0; camera_i < cameras.Length; camera_i++)
+		{
+
+			Vector3 camera_position = cameras [camera_i].transform.position;
+			float camera_distance = cameras [camera_i].camera_distance;
+			int camera_pixel_width = cameras [camera_i].pixel_width;
+			float camera_width = cameras [camera_i].camera_width;
+
+			for (int i = 0; i < vertex_num; i++)
+			{
+				redius_on_plane [camera_i, i] = dp [i].redius * camera_distance / Vector3.Distance (dp_3D, dp_3D [i]);
+
+				redius_on_texture [camera_i, i] = redius_on_plane [camera_i, i] / camera_width * camera_pixel_width;
+			}
+		}
+
+
+
+	}
 }
