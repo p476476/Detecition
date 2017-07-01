@@ -14,7 +14,12 @@ public class Skeleton : MonoBehaviour {
         joints.AddRange(GetComponentsInChildren<Transform>());
         foreach (var b in joints)
         {
-            Bone bone = new Bone(b.parent, b, this);
+			Bone bone;
+			if (b.name == "hips")
+				bone = new Bone(b, b, this);
+			else
+            	bone = new Bone(b.parent, b, this);
+			
             bones.Add(bone);
 
 

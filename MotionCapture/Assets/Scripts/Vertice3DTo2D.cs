@@ -84,10 +84,10 @@ public class Vertice3DTo2D
     }
 
 	//將3D骨架投影到投影面
-	public void scaleVertice3DToTexture(DetectingPoint[] dp,Vector3[] dp_3D,RealCamera[] cameras, float[,] redius_on_plane, int[,] redius_on_texture)
+	public void scaleVertice3DRadius(float[] dp_radius,Vector3[] dp_3D,RealCamera[] cameras, float[,] radius_on_plane, int[,] radius_on_texture)
 	{
 		int vertex_num = dp_3D.Length;
-		Vector3[] rediuses = new Vector3[vertex_num];
+		Vector3[] radiuses = new Vector3[vertex_num];
 
 
 
@@ -101,12 +101,11 @@ public class Vertice3DTo2D
 
 			for (int i = 0; i < vertex_num; i++)
 			{
-				redius_on_plane [camera_i, i] = dp [i].redius * camera_distance / Vector3.Distance (dp_3D, dp_3D [i]);
+				radius_on_plane [camera_i, i] = dp_radius [i] * camera_distance / Vector3.Distance (camera_position, dp_3D [i]);
 
-				redius_on_texture [camera_i, i] = redius_on_plane [camera_i, i] / camera_width * camera_pixel_width;
+				radius_on_texture [camera_i, i] = (int)(radius_on_plane [camera_i, i] / camera_width * camera_pixel_width);
 			}
 		}
-
 
 
 	}

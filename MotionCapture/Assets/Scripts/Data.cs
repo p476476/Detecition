@@ -8,7 +8,7 @@ public class Data :MonoBehaviour
 	//image result data
 	public Texture2D[] last_diff_frames;			//[camera No.]
 	public Texture2D[] current_diff_frames;		//[camera No.]
-	public Vector3[,,] movement;	//[camera No. , x , y]
+	public Vector3[,,] movement;	//[camera No. , x , y]  (pixel movement)
 
 
 	//detect point position data
@@ -17,12 +17,28 @@ public class Data :MonoBehaviour
 	public Vector3[,] dp_normalized;			//[camera No. , detection point No.];
 	public Vector3[,] dp_on_texture;			//[camera No. , detection point No.];
 
+	public float[] dp_radius;
+	public float[,] dp_radius_on_plane;
+	public int[,] dp_radius_on_texture;
+
+	// modified detect point		(use it to find next pose)
+	public Vector3[] modified_dp3D;
+	public Vector3[,] modified_dp_on_project_plane;		//[camera No. , detection point No.];
+	public Vector3[,] modified_dp_normalized;			//[camera No. , detection point No.];
+	public Vector3[,] modified_dp_on_texture;			//[camera No. , detection point No.];
+
+
 	//detect point data
 	public DetectingPoint2D [,] dp_2D;			//[camera No. , detection point No.];
 	public Vector3[,] dp_movement;				//[camera No. , detection point No.];
 	public Vector3[] dp_movement_3D;			//[detection point No.];
 
-    public void init(int camera_count,int dp_count,int camera_width_pixel,int camera_height_pixel)
+
+
+	//bone calculate data
+	public Vector3[] bone_movement;
+
+	public void init(int camera_count,int dp_count,int bone_count,int camera_width_pixel,int camera_height_pixel)
 	{
 		last_diff_frames = new Texture2D[camera_count];
 		current_diff_frames= new Texture2D[camera_count];
@@ -74,6 +90,13 @@ public class Data :MonoBehaviour
             }
         }
 
+		//======================
+		dp_radius = new float[dp_count];
+		dp_radius_on_plane = new float[camera_count,dp_count];
+		dp_radius_on_texture = new int[camera_count,dp_count];
+
+		//======================
+
         dp_2D = new DetectingPoint2D[camera_count,dp_count];
         for (int i = 0; i < dp_2D.GetLength(0); i++)
         {
@@ -93,6 +116,13 @@ public class Data :MonoBehaviour
         }
 
 		dp_movement_3D = new Vector3[dp_count];
+		for (int i = 0; i < dp_movement.GetLength(0); i++)
+		{
+			dp_movement_3D[i] = new Vector3();
+		}
+
+		//=========================
+		bone_movement= new Vector3[bone_count];
 		for (int i = 0; i < dp_movement.GetLength(0); i++)
 		{
 			dp_movement_3D[i] = new Vector3();

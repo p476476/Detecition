@@ -22,7 +22,7 @@ public class RealCamera : MonoBehaviour {
 
     //camera setting
 	public int camera_num = 0;
-    public float camera_width=1;
+    public float camera_width=2f;
     public float camera_height =1;
     public float camera_distance = 1;
     public int pixel_width = 640;

@@ -41,6 +41,7 @@ public class Bone  {
             dp.position = head.position+interval*i;
             //設定偵測點顏色
 			//dp.color
+			dp.radius = this.radius;
             owner.detecting_points.Add(dp);
         }
     }

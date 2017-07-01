@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Main : MonoBehaviour {
 
@@ -8,11 +9,13 @@ public class Main : MonoBehaviour {
 
     //script
     Vertice3DTo2D v3t2 = new Vertice3DTo2D();
+	DetectProcess detect_process = new DetectProcess();
     ImageProcess image_process = new ImageProcess();
+	SimilarityCalculate similarity_calculate = new SimilarityCalculate();
 
     //object
     public Transform human;
-    Skeleton skeleton;
+    public Skeleton skeleton;
 	RealCameraManager real_camera_manager;
     public RealCamera[] real_cameras;
 
@@ -44,7 +47,7 @@ public class Main : MonoBehaviour {
 
         //初始化計算資料
         data = GetComponent<Data>();
-		data.init (real_camera_manager.camera_count, skeleton.detecting_points.Count,640,480);
+		data.init (real_camera_manager.camera_count, skeleton.detecting_points.Count,skeleton.bones.Count,640,480);
 
 
         dp1 = new Vector3[skeleton.detecting_points.Count];
@@ -61,6 +64,7 @@ public class Main : MonoBehaviour {
         for (int i = 0; i < skeleton.detecting_points.Count; i++)
         {
             data.dp3D[i] = skeleton.detecting_points[i].position;
+			data.dp_radius[i] = skeleton.detecting_points [i].radius;
         }
 		for(int i=0;i<real_cameras.Length;i++)
         {
@@ -89,12 +93,15 @@ public class Main : MonoBehaviour {
 			{
 				data.dp_on_texture [i, j] = dp3 [j];
 			}
+
+			v3t2.scaleVertice3DRadius (data.dp_radius, data.dp3D, real_cameras, data.dp_radius_on_plane, data.dp_radius_on_texture);
 				
         }
 
 
     }
 
+	//detecting
      IEnumerator fun()
     {
         yield return new WaitForSeconds(1f);
@@ -139,34 +146,34 @@ public class Main : MonoBehaviour {
 
 						camera.last_frame.SetPixels (current_frame.GetPixels());
 						DestroyImmediate (current_frame);
-                        
-                       
-
-                        
-                    }
-
-
-                    
-
+    
+                    }               
                 }
-               
-
-
             }
 
             if (start_detect)
             {
 
-                //計算 movement
+                //計算 pixel movement
                 image_process.calculateMovement(data.movement, data.last_diff_frames, data.current_diff_frames, 10);
 
                 //計算 dp movement
-                DetectProcess detect_process = new DetectProcess();
+                
                 detect_process.calculateDetectPointDirection(data.movement, data.dp_on_texture, data.dp_2D, data.dp_movement);
+				detect_process.calculateDetectPointMovementIn3D (data.dp3D, data.dp_movement, data.dp_on_texture, data.dp_movement_3D);
+
+
+
+				detect_process.calculateBoneMovement (skeleton.bones, data.dp_movement_3D, data.bone_movement);
+
+				//float similarity_value = similarity_calculate.Similarity ();
+				//if(similarity_value>0.7)
+				//detect_process.rotateBones (skeleton.joints, skeleton.bones, data.bone_movement);
 
             }
+			GC.Collect();
 
-            yield return new WaitForSeconds(0.03f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 

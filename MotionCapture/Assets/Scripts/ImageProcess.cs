@@ -16,9 +16,12 @@ public class ImageProcess {
 
         for (int i=0;i<width*height;i++)
         {
-            difference[i].r = Mathf.Abs(secondPixels[i].r- firstPixels[i].r);
-            difference[i].b = Mathf.Abs(secondPixels[i].b - firstPixels[i].b);
-            difference[i].g = Mathf.Abs(secondPixels[i].g - firstPixels[i].g);
+			float diff = (Mathf.Abs(secondPixels[i].r - firstPixels[i].r)
+						 +Mathf.Abs(secondPixels[i].b - firstPixels[i].b)
+				         +Mathf.Abs(secondPixels[i].g - firstPixels[i].g))/3.0f;
+			difference[i].r = diff;
+			difference[i].b = diff;
+			difference[i].g = diff;
         }
 
         result.SetPixels(difference);
@@ -26,12 +29,12 @@ public class ImageProcess {
     }
 
     
-
+	//calculateMovement()
 	public void calculateMovement(Vector3[,,] movement,Texture2D[] last_diff_frames,Texture2D[] current_diff_frames,int detect_range)
 	{
         float thres = 0.3f;
 
-		for (int frame_i = 0; frame_i < 1; frame_i++) {    //each frame
+		for (int frame_i = 0; frame_i < current_diff_frames.Length; frame_i++) {    //each frame
             Color[] c_frame  = current_diff_frames[frame_i].GetPixels ();
 			Color[] l_frame = last_diff_frames[frame_i].GetPixels ();
 
@@ -111,7 +114,10 @@ public class ImageProcess {
                         }
                     }
 
-                    movement[frame_i,i%640,i/640] = move / count;
+					if(count>0)
+                   		movement[frame_i,i%640,i/640] = move / count;
+					else
+						movement[frame_i, i % 640, i / 640] = Vector3.zero;
 				}
                 else
                 {
