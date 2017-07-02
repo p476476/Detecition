@@ -11,7 +11,7 @@ public class SimilarityCalculate  {
 	//int max_similarity_count=10;
 
 
-	public float Similarity(Texture2D[] current_diff_frames,DetectingPoint2D [,] dp_2D,Vector3[,] dp_on_texture,Vector3[,] dp_movement,int[,] dp_radius_on_texture){
+	public float Similarity(Texture2D[] current_diff_frames,DetectingPoint2D [,] dp_2D,Vector3[,] dp_on_texture,int[,] dp_radius_on_texture){
 
 		int total_diff_count=0;
 		int cover_count=0;
@@ -29,7 +29,7 @@ public class SimilarityCalculate  {
 					for (int k = 0; k < dp_on_texture.GetLength (0); k++) {	//each dp
 						
 						if (dp_2D [i, k].color.r - pixels [j].r < 0.1	 //if same color and distance(pixel to dp) < radius
-							&& (Vector3.Distance (dp_on_texture [i, k]+dp_movement[i, k], new Vector3 (j / 640, j % 640)) < (float)dp_radius_on_texture [i,k])) {
+							&& (Vector3.Distance (dp_on_texture [i, k], new Vector3 (j / 640, j % 640)) < (float)dp_radius_on_texture [i,k])) {
 							cover_count++;
 							break;
 						}

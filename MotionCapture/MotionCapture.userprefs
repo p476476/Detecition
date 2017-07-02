@@ -2,23 +2,16 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Main.cs">
     <Files>
-      <File FileName="Assets\Scripts\DetectProcess.cs" Line="107" Column="3" NotebookId="1" />
-      <File FileName="Assets\Scripts\Main.cs" Line="67" Column="61" NotebookId="1" />
-      <File FileName="Assets\Scripts\Drawer.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets\Scripts\Skeleton.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets\Scripts\DetectingPoint.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets\Scripts\SimilarityCalculate.cs" Line="34" Column="14" NotebookId="1" />
-      <File FileName="Assets\Scripts\ImageProcess.cs" Line="21" Column="68" NotebookId="1" />
-      <File FileName="Assets\Scripts\DetectingPoint2D.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets\Scripts\Vertice3DTo2D.cs" Line="86" Column="15" NotebookId="1" />
+      <File FileName="Assets\Scripts\DetectProcess.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Main.cs" Line="67" Column="61" />
+      <File FileName="Assets\Scripts\Drawer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Skeleton.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DetectingPoint.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SimilarityCalculate.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\ImageProcess.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DetectingPoint2D.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Vertice3DTo2D.cs" Line="1" Column="1" />
     </Files>
-    <FloatingWindows>
-      <FloatingWindow WindowId="1" X="-32000" Y="-32000" Width="1920" Height="1017">
-        <Files>
-          <File FileName="Assets\Scripts\Data.cs" Line="28" Column="29" />
-        </Files>
-      </FloatingWindow>
-    </FloatingWindows>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>

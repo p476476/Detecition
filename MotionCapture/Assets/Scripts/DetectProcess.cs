@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class DetectProcess
 {
-	public void calculateDetectPointDirection (Vector3[,,] movement, Vector3[,] dp_on_texture, DetectingPoint2D[,] dp_2D, Vector3[,] dp_movement)
+	public void calculateDetectPointDirection (Vector3[,,] movement, Vector3[,] dp_on_texture, Vector3[,] dp_movement)
 	{
-		for (int frame_i = 0; frame_i <1; frame_i++) {
-			for (int dp_i = 0; dp_i < dp_2D.GetLength (1); dp_i++) {
+		for (int frame_i = 0; frame_i < dp_on_texture.GetLength(0); frame_i++) { //each camera
+			for (int dp_i = 0; dp_i < dp_on_texture.GetLength (1); dp_i++) {    //each dp
 				Vector3 total_move = new Vector3 ();
 				int count = 0;
 
@@ -106,6 +106,12 @@ public class DetectProcess
 		}
 		
 	}
+
+    public void moveDetectPoint(Vector3[] dp3D,Vector3[] dp_movement_3D)
+    {
+        for(int i=0;i<dp3D.Length;i++)
+            dp3D[i] = dp3D[i] + dp_movement_3D[i];
+    }
 
 	public void rotateBones (List<Transform> joints,List<Bone> bones,Vector3[] bone_movement)
 	{

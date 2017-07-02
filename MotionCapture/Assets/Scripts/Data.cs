@@ -21,22 +21,19 @@ public class Data :MonoBehaviour
 	public float[,] dp_radius_on_plane;
 	public int[,] dp_radius_on_texture;
 
-	// modified detect point		(use it to find next pose)
-	public Vector3[] modified_dp3D;
-	public Vector3[,] modified_dp_on_project_plane;		//[camera No. , detection point No.];
-	public Vector3[,] modified_dp_normalized;			//[camera No. , detection point No.];
-	public Vector3[,] modified_dp_on_texture;			//[camera No. , detection point No.];
-
-
-	//detect point data
-	public DetectingPoint2D [,] dp_2D;			//[camera No. , detection point No.];
+    //detect point data 
+    public DetectingPoint2D [,] dp_2D;			//[camera No. , detection point No.];
 	public Vector3[,] dp_movement;				//[camera No. , detection point No.];
-	public Vector3[] dp_movement_3D;			//[detection point No.];
+	public Vector3[] dp_movement_3D;            //[detection point No.];
 
+    // modified detect point		(use it to find next pose)
+    public Vector3[] modified_dp3D;
+    public Vector3[,] modified_dp_on_project_plane;     //[camera No. , detection point No.];
+    public Vector3[,] modified_dp_normalized;           //[camera No. , detection point No.];
+    public Vector3[,] modified_dp_on_texture;			//[camera No. , detection point No.];
 
-
-	//bone calculate data
-	public Vector3[] bone_movement;
+    //bone calculate data
+    public Vector3[] bone_movement;
 
 	public void init(int camera_count,int dp_count,int bone_count,int camera_width_pixel,int camera_height_pixel)
 	{

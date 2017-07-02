@@ -66,37 +66,12 @@ public class Main : MonoBehaviour {
             data.dp3D[i] = skeleton.detecting_points[i].position;
 			data.dp_radius[i] = skeleton.detecting_points [i].radius;
         }
-		for(int i=0;i<real_cameras.Length;i++)
-        {
-            
 
-            //投影到投影面
-			dp1 = v3t2.projectVertice3DToProjectPlane(data.dp3D, real_cameras[i]);
-            for (int j = 0; j < dp1.Length; j++)
-            {
-                data.dp_on_project_plane[i, j] = dp1[j];
-            }
-           
+        //Detect_Point投影到Texture (存到modified_dp用於計算，存到dp用於顯示)
+        Detect_Point_Project(data.dp3D,data.dp_on_project_plane, data.dp_normalized, data.dp_on_texture);
 
-
-            //normalize
-			dp2  = v3t2.normalizeVertice2D(dp1, real_cameras[i]);
-			for(int j=0;j<dp2.Length;j++)
-			{
-				data.dp_normalized [i, j] = dp2 [j];
-			}
-				
-
-            //轉換成textrue座標
-			dp3 = v3t2.transformNormalizeVerticeToTexture(dp2, real_cameras[i]);
-			for(int j=0;j<dp2.Length;j++)
-			{
-				data.dp_on_texture [i, j] = dp3 [j];
-			}
-
-			v3t2.scaleVertice3DRadius (data.dp_radius, data.dp3D, real_cameras, data.dp_radius_on_plane, data.dp_radius_on_texture);
-				
-        }
+        //Detect_Point半徑 投影到Texture 
+        v3t2.scaleVertice3DRadius(data.dp_radius, data.dp3D, real_cameras, data.dp_radius_on_plane, data.dp_radius_on_texture);
 
 
     }
@@ -157,17 +132,45 @@ public class Main : MonoBehaviour {
                 //計算 pixel movement
                 image_process.calculateMovement(data.movement, data.last_diff_frames, data.current_diff_frames, 10);
 
-                //計算 dp movement
-                
-                detect_process.calculateDetectPointDirection(data.movement, data.dp_on_texture, data.dp_2D, data.dp_movement);
-				detect_process.calculateDetectPointMovementIn3D (data.dp3D, data.dp_movement, data.dp_on_texture, data.dp_movement_3D);
+                float similarity_value = 0f;            //相似值
+                float vaild_similarity_value = 0.7f;    //當相似值>vaild_similarity_value，完成追蹤
+                int calculate_times = 0;                //計算次數
+                int max_calculate_times = 10;           //最大計算次數
+
+                //Detect_Point投影到Texture (存到modified_dp用於計算，存到dp用於顯示)
+                Detect_Point_Project(data.dp3D, data.modified_dp_on_project_plane, data.modified_dp_normalized, data.modified_dp_on_texture);
+
+                do
+                {
+                    calculate_times++;
+
+                    
+
+                    //計算 dp movement on Texture
+                    //結果存到 dp_movement
+                    detect_process.calculateDetectPointDirection(data.movement, data.modified_dp_on_texture, data.dp_movement);
+
+                    //結合所有dp 在各 texture 的 2d movement 來計算 dp 3d movement
+                    //結果存到dp_movement_3D
+                    detect_process.calculateDetectPointMovementIn3D(data.modified_dp3D, data.dp_movement, data.modified_dp_on_texture, data.dp_movement_3D);
+
+                    //移動dp
+                    detect_process.moveDetectPoint(data.modified_dp3D, data.dp_movement_3D);
+
+                    //Detect_Point投影到Texture (存到modified_dp用於計算，存到dp用於顯示)
+                    Detect_Point_Project(data.modified_dp3D, data.modified_dp_on_project_plane, data.modified_dp_normalized, data.modified_dp_on_texture);
+
+                    //相似度計算
+                    similarity_value = similarity_calculate.Similarity();
+                } while (similarity_value < vaild_similarity_value && calculate_times < max_calculate_times);
+
+                //將modified_dp的結果更新到骨架上
 
 
+                detect_process.calculateBoneMovement(skeleton.bones, data.dp_movement_3D, data.bone_movement);
 
-				detect_process.calculateBoneMovement (skeleton.bones, data.dp_movement_3D, data.bone_movement);
-
-				//float similarity_value = similarity_calculate.Similarity ();
-				//if(similarity_value>0.7)
+				//
+				//
 				//detect_process.rotateBones (skeleton.joints, skeleton.bones, data.bone_movement);
 
             }
@@ -177,7 +180,37 @@ public class Main : MonoBehaviour {
         }
     }
 
+    //Detect_Point投影到Texture
+    void Detect_Point_Project(Vector3[]dp3D, Vector3[,] dp_on_project_plane, Vector3[,] dp_normalized, Vector3[,] dp_on_texture)
+    {
+        for (int i = 0; i < real_cameras.Length; i++)
+        {
+            //投影到投影面
+            dp1 = v3t2.projectVertice3DToProjectPlane(dp3D, real_cameras[i]);
+            for (int j = 0; j < dp1.Length; j++)
+            {
+                dp_on_project_plane[i, j] = dp1[j];
+            }
+
+            //normalize
+            dp2 = v3t2.normalizeVertice2D(dp1, real_cameras[i]);
+            for (int j = 0; j < dp2.Length; j++)
+            {
+                dp_normalized[i, j] = dp2[j];
+            }
 
 
-    
+            //轉換成textrue座標
+            dp3 = v3t2.transformNormalizeVerticeToTexture(dp2, real_cameras[i]);
+            for (int j = 0; j < dp2.Length; j++)
+            {
+                dp_on_texture[i, j] = dp3[j];
+            }
+
+        }
+    }
+
+
+
+
 }
