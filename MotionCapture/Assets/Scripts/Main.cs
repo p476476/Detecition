@@ -25,11 +25,13 @@ public class Main : MonoBehaviour {
     //test
     public Transform tempPlane;
     public bool start_detect = false;
-
     
     Vector3[] dp1;
     Vector3[] dp2;
     Vector3[] dp3;
+
+    //Trackers
+    
 
     private void Awake()
     {
@@ -161,7 +163,7 @@ public class Main : MonoBehaviour {
                     Detect_Point_Project(data.modified_dp3D, data.modified_dp_on_project_plane, data.modified_dp_normalized, data.modified_dp_on_texture);
 
                     //相似度計算
-                    similarity_value = similarity_calculate.Similarity();
+                   // similarity_value = similarity_calculate.Similarity();
                 } while (similarity_value < vaild_similarity_value && calculate_times < max_calculate_times);
 
                 //將modified_dp的結果更新到骨架上

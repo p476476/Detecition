@@ -18,7 +18,7 @@
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.5.2f1</UnityVersion>
     <RootNamespace></RootNamespace>
-    <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
+    <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -81,6 +81,9 @@
     <Compile Include="Assets\Scripts\DetectingPoint.cs" />
     <Compile Include="Assets\Scripts\DetectingPoint2D.cs" />
     <Compile Include="Assets\Scripts\Drawer.cs" />
+    <Compile Include="Assets\Scripts\HandTracker.cs" />
+    <Compile Include="Assets\Scripts\Human.cs" />
+    <Compile Include="Assets\Scripts\HumanTracker.cs" />
     <Compile Include="Assets\Scripts\ImageProcess.cs" />
     <Compile Include="Assets\Scripts\Main.cs" />
     <Compile Include="Assets\Scripts\NewBehaviourScript.cs" />
